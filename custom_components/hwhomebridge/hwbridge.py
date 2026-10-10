@@ -747,6 +747,9 @@ def OnGetRoomInfoCB(sn_ptr, roomName_ptr, devName_ptr):
                     )
                     if bridge_entry and bridge_entry.name_by_user:
                         dev_name = bridge_entry.name_by_user
+                    elif bridge_entry and bridge_entry.name:
+                        # 桥接条目创建时以注册名（实体级为实体名）作为 name
+                        dev_name = bridge_entry.name
 
                 # 其次：原始 HA 设备的 name_by_user 或 name
                 orig_entry = None
@@ -754,6 +757,11 @@ def OnGetRoomInfoCB(sn_ptr, roomName_ptr, devName_ptr):
                     orig_entry = dev_reg.devices.get(vd.ha_device_id)
                     if orig_entry:
                         dev_name = orig_entry.name_by_user or orig_entry.name or ""
+
+                # 再次：注册时缓存的名称（实体级白名单设备的 ha_device_id 为伪 ID，
+                # device_registry 中无对应原始设备，用 vd.name 兜底）
+                if not dev_name and vd.name:
+                    dev_name = vd.name
 
                 # 房间名：优先从桥接设备条目获取 area_id，其次从原始设备
                 area_id = None

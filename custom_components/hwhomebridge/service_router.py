@@ -128,7 +128,8 @@ class ServiceRouter:
             # 新设备：生成新 SN
             sn = SNManager.generate_sn(device_id)
         
-        vd = VirtualDevice(sn=sn, product=product, ha_device_id=device_id)
+        vd = VirtualDevice(sn=sn, product=product, ha_device_id=device_id,
+                           name=device_name)
 
         # 4. 建立 service → entity 映射
         # 实体级注册时跳过 domain/include/exclude 匹配，所有服务直接绑定该实体
@@ -179,7 +180,8 @@ class ServiceRouter:
             return None
 
         sn = SNManager.generate_sn(device_id)
-        vd = VirtualDevice(sn=sn, product=product, ha_device_id=device_id)
+        vd = VirtualDevice(sn=sn, product=product, ha_device_id=device_id,
+                           name=device_name)
 
         mapping_count = self._build_service_mapping(vd, product, entity_list,
                                                     entity_direct=True)

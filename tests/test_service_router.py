@@ -77,3 +77,19 @@ def test_entity_level_without_adapter_returns_none(router):
                       "name": "锁"}],
         entity_level=True)
     assert vd is None
+
+
+def test_register_direct_entity_keeps_entity_name(router):
+    """白名单直通注册必须把实体名保存到 vd.name。
+
+    OnGetRoomInfoCB 上云取名时，实体级设备的 ha_device_id 是伪 ID
+    （device_registry 中无对应条目），必须靠 vd.name 兜底，
+    否则华为 App 中所有白名单设备显示同名（如“智控断路器”）。
+    """
+    vd = router.register_direct_entity(
+        "entity::switch.pdu_port3", "PDU 3口",
+        [{"entity_id": "switch.pdu_port3", "domain": "switch",
+          "name": "PDU 3口"}])
+
+    assert vd is not None
+    assert vd.name == "PDU 3口"

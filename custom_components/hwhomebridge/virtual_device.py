@@ -31,16 +31,19 @@ class ServiceEntry:
 class VirtualDevice:
     """虚拟设备，对应华为侧的一个逻辑设备（一个 SN）"""
 
-    def __init__(self, sn: str, product: ProductDef, ha_device_id: str):
+    def __init__(self, sn: str, product: ProductDef, ha_device_id: str,
+                 name: str = ""):
         """
         Args:
             sn: 设备 SN，由 generate_sn() 生成
             product: 对应的华为产品定义
             ha_device_id: 对应的 HA device_id
+            name: 设备名称（实体级设备为实体名），上云时供 OnGetRoomInfoCB 兜底
         """
         self.sn: str = sn
         self.product: ProductDef = product
         self.ha_device_id: str = ha_device_id
+        self.name: str = name
         self.service_entries: dict[str, ServiceEntry] = {}  # service_id -> ServiceEntry
         self.online: bool = False
         self.switch_state: int = 0  # 缓存 switch 状态（用于 button 映射场景）
