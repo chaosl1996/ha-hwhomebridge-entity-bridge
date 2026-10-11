@@ -1,7 +1,7 @@
 {
   "domain": "hwhomebridge",
   "name": "HuaweiHome Bridge (Entity Bridge)",
-  "version": "2.0.1",
+  "version": "2.0.2",
   "config_flow": true,
   "documentation": "https://github.com/chaosl1996/ha-hwhomebridge-entity-bridge",
   "issue_tracker": "https://github.com/chaosl1996/ha-hwhomebridge-entity-bridge/issues",

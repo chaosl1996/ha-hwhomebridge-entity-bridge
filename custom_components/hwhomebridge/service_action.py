@@ -200,16 +200,20 @@ class ServiceActionDispatcher:
         power_on = payload.get("on", 0) == 1
         domain = entity_id.split('.')[0]
 
-        # button 域：瞬时按钮，没有 turn_on/turn_off，任何指令触发 press
+        # button 域：瞬时按钮，只在 on=1 时触发 press（on=0 忽略）
+        # 华为 App 中 button 显示为 008 断路器，做成"点一下开，自动回弹关"的瞬时开关
         # （注：电饭煲取消按钮的 on=1 由 on_command 在 route_action 中拦截，
         #   不会走到这里，行为不变）
         if domain == "button":
-            self._call_service_async(
-                domain="button",
-                service="press",
-                entity_id=entity_id
-            )
-            _LOGGER.info(f"Button pressed: {entity_id}")
+            if power_on:
+                self._call_service_async(
+                    domain="button",
+                    service="press",
+                    entity_id=entity_id
+                )
+                _LOGGER.info(f"Button pressed: {entity_id}")
+            else:
+                _LOGGER.debug(f"Button off command ignored (momentary): {entity_id}")
             return True
 
         # lock 域：on=1 → 解锁，on=0 → 上锁

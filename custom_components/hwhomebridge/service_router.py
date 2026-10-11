@@ -1097,10 +1097,10 @@ class ServiceRouter:
                 except (ValueError, TypeError):
                     return json.dumps({char_name: 0})
 
-            # --- button: 不需要状态查询，但 switch 服务需要返回缓存的开关状态 ---
+            # --- button: 瞬时开关，永远返回 0（off），确保华为 App 显示为关 ---
             if domain == "button":
-                if svc_id == "switch" and vd is not None:
-                    return json.dumps({char_name: vd.switch_state})
+                if svc_id == "switch":
+                    return json.dumps({char_name: 0})
                 return None
 
             # --- 默认兜底 ---
